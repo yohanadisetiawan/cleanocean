@@ -1,27 +1,36 @@
-function initPembuat () {
-    scene.setBackgroundImage(assets.image`Pembuat`)
+function initPembuat() {
+    scene.setBackgroundImage(assets.image`
+        Pembuat
+        `)
     story.printText("Pembuat Yohan Adi Setiawan sebagai Guru Informatika/KKA", 75, 110, 15)
 }
-function initIkan () {
-    for (let index = 0; index <= 1; index++) {
-        Ikan = sprites.create(assets.image`IkanNapoleon`, SpriteKind.Projectile)
+
+function initIkan() {
+    
+    for (let index = 0; index < 2; index++) {
+        Ikan = sprites.create(assets.image`
+                IkanNapoleon
+                `, SpriteKind.Projectile)
         scaling.scaleToPercent(Ikan, 25, ScaleDirection.Uniformly, ScaleAnchor.Middle)
         Ikan.setPosition(randint(0, scene.screenWidth()), randint(0, scene.screenHeight()))
         Ikan.setFlag(SpriteFlag.AutoDestroy, true)
         Ikan.follow(submarine, 15)
     }
 }
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+
+controller.A.onEvent(ControllerButtonEvent.Pressed, function on_a_pressed() {
     if (posisi_menu == 2 || posisi_menu == 3) {
         initMenu()
     }
+    
 })
-controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
+controller.left.onEvent(ControllerButtonEvent.Pressed, function on_left_pressed() {
     if (posisi_menu == 1) {
         music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.UntilDone)
     }
+    
 })
-statusbars.onStatusReached(StatusBarKind.Energy, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Fixed, 0, function (status) {
+statusbars.onStatusReached(StatusBarKind.Energy, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Fixed, 0, function on_status_reached_comparison_lte_type_fixed(status: StatusBarSprite) {
     if (info.life() == 0) {
         game.setGameOverEffect(false, effects.bubbles)
         game.setGameOverMessage(false, "GAME OVER!")
@@ -31,27 +40,33 @@ statusbars.onStatusReached(StatusBarKind.Energy, statusbars.StatusComparison.LTE
         statusbar.value += 50
         info.setLife(info.life() - 1)
     }
+    
 })
-info.onScore(100, function () {
+info.onScore(100, function on_on_score() {
     game.gameOver(true)
     game.setGameOverPlayable(true, music.melodyPlayable(music.sonar), false)
 })
-controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+controller.right.onEvent(ControllerButtonEvent.Pressed, function on_right_pressed() {
     if (posisi_menu == 1) {
         music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.UntilDone)
     }
+    
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function on_on_overlap(sprite: Sprite, otherSprite: Sprite) {
     statusbar.value += -1
     music.play(music.melodyPlayable(music.beamUp), music.PlaybackMode.UntilDone)
     submarine.startEffect(effects.fire, 200)
     karang.setFlag(SpriteFlag.AutoDestroy, true)
 })
-function initBantuan () {
-    scene.setBackgroundImage(assets.image`Cover`)
+function initBantuan() {
+    scene.setBackgroundImage(assets.image`
+        Cover
+        `)
     story.printDialog("Gunakan tombol panah untuk gerak! Hindari karang dan Ikan, dan ambil Sampah plastik", 80, 100, 60, 150, 15)
 }
-function initMenu () {
+
+function initMenu() {
+    
     music.stopAllSounds()
     scene.setBackgroundImage(img`
         ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -177,7 +192,8 @@ function initMenu () {
         `)
     music.play(music.stringPlayable("E D G F B A C5 B ", 120), music.PlaybackMode.LoopingInBackground)
     posisi_menu = 0
-    story.startCutscene(function () {
+    story.startCutscene(function on_start_cutscene() {
+        
         story.showPlayerChoices("Main", "Bantuan", "Pembuat")
         if (story.checkLastAnswer("Main")) {
             posisi_menu = 1
@@ -192,12 +208,17 @@ function initMenu () {
             posisi_menu = 3
             initPembuat()
         }
+        
         story.cancelAllCutscenes()
     })
 }
-function initKarang () {
-    for (let index = 0; index <= 4; index++) {
-        karang = sprites.create(assets.image`karang`, SpriteKind.Projectile)
+
+function initKarang() {
+    
+    for (let index2 = 0; index2 < 5; index2++) {
+        karang = sprites.create(assets.image`
+            karang
+            `, SpriteKind.Projectile)
         scaling.scaleToPercent(karang, 40, ScaleDirection.Uniformly, ScaleAnchor.Middle)
         karang.setPosition(randint(1, 115), randint(80, 100))
         while (karang.overlapsWith(karang)) {
@@ -205,15 +226,25 @@ function initKarang () {
         }
     }
 }
-function initSampah () {
-    sampah = sprites.create(assets.image`sampah_plastik`, SpriteKind.Enemy)
+
+function initSampah() {
+    
+    sampah = sprites.create(assets.image`
+            sampah_plastik
+            `, SpriteKind.Enemy)
     scaling.scaleToPercent(sampah, 25, ScaleDirection.Uniformly, ScaleAnchor.Middle)
     sampah.setPosition(randint(10, 140), 10)
     sampah.setVelocity(0, 50)
 }
-function initSelam () {
-    scene.setBackgroundImage(assets.image`lautdalam`)
-    submarine = sprites.create(assets.image`selam`, SpriteKind.Player)
+
+function initSelam() {
+    
+    scene.setBackgroundImage(assets.image`
+        lautdalam
+        `)
+    submarine = sprites.create(assets.image`
+        selam
+        `, SpriteKind.Player)
     scaling.scaleToPercent(submarine, 30, ScaleDirection.Uniformly, ScaleAnchor.Middle)
     submarine.setStayInScreen(true)
     controller.moveSprite(submarine)
@@ -223,18 +254,19 @@ function initSelam () {
     statusbar.attachToSprite(submarine, 0, 0)
     info.setLife(3)
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function on_on_overlap2(sprite2: Sprite, otherSprite2: Sprite) {
     info.changeScoreBy(1)
     sprites.destroy(sampah, effects.spray, 500)
 })
-let sampah: Sprite = null
-let karang: Sprite = null
-let statusbar: StatusBarSprite = null
+let sampah : Sprite = null
+let karang : Sprite = null
+let statusbar : StatusBarSprite = null
 let posisi_menu = 0
-let submarine: Sprite = null
-let Ikan: Sprite = null
+let submarine : Sprite = null
+let Ikan : Sprite = null
 initMenu()
-game.onUpdateInterval(1000, function () {
+game.onUpdateInterval(1000, function on_update_interval() {
     if (posisi_menu == 1) {
         initSampah()
         for (let value of sprites.allOfKind(SpriteKind.Projectile)) {
@@ -245,6 +277,8 @@ game.onUpdateInterval(1000, function () {
                 value.vx = -30
                 value.image.flipY()
             }
+            
         }
     }
+    
 })

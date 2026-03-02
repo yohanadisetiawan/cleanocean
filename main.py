@@ -6,6 +6,18 @@ def initPembuat():
         75,
         110,
         15)
+def initIkan():
+    global Ikan
+    for index in range(2):
+        Ikan = sprites.create(assets.image("""
+                IkanNapoleon
+                """),
+            SpriteKind.projectile)
+        scaling.scale_to_percent(Ikan, 25, ScaleDirection.UNIFORMLY, ScaleAnchor.MIDDLE)
+        Ikan.set_position(randint(0, scene.screen_width()),
+            randint(0, scene.screen_height()))
+        Ikan.set_flag(SpriteFlag.AUTO_DESTROY, True)
+        Ikan.follow(submarine, 15)
 
 def on_a_pressed():
     if posisi_menu == 2 or posisi_menu == 3:
@@ -19,10 +31,14 @@ def on_left_pressed():
 controller.left.on_event(ControllerButtonEvent.PRESSED, on_left_pressed)
 
 def on_status_reached_comparison_lte_type_fixed(status):
-    game.set_game_over_effect(False, effects.bubbles)
-    game.set_game_over_message(False, "GAME OVER!")
-    game.set_game_over_playable(False, music.melody_playable(music.siren), False)
-    game.reset()
+    if info.life() == 0:
+        game.set_game_over_effect(False, effects.bubbles)
+        game.set_game_over_message(False, "GAME OVER!")
+        game.set_game_over_playable(False, music.melody_playable(music.siren), False)
+        game.reset()
+    else:
+        statusbar.value += 50
+        info.set_life(info.life() - 1)
 statusbars.on_status_reached(StatusBarKind.energy,
     statusbars.StatusComparison.LTE,
     statusbars.ComparisonType.FIXED,
@@ -195,6 +211,7 @@ def initMenu():
             music.stop_all_sounds()
             initSelam()
             initKarang()
+            initIkan()
         elif story.check_last_answer("Bantuan"):
             posisi_menu = 2
             initBantuan()
@@ -206,7 +223,7 @@ def initMenu():
     
 def initKarang():
     global karang
-    for index in range(5):
+    for index2 in range(5):
         karang = sprites.create(assets.image("""
             karang
             """), SpriteKind.projectile)
@@ -247,12 +264,20 @@ sprites.on_overlap(SpriteKind.player, SpriteKind.enemy, on_on_overlap2)
 
 sampah: Sprite = None
 karang: Sprite = None
-submarine: Sprite = None
 statusbar: StatusBarSprite = None
 posisi_menu = 0
+submarine: Sprite = None
+Ikan: Sprite = None
 initMenu()
 
 def on_update_interval():
     if posisi_menu == 1:
         initSampah()
+        for value in sprites.all_of_kind(SpriteKind.projectile):
+            if value.is_hitting_tile(CollisionDirection.LEFT):
+                value.vx = 30
+                value.image.flip_x()
+            elif value.is_hitting_tile(CollisionDirection.RIGHT):
+                value.vx = -30
+                value.image.flip_y()
 game.on_update_interval(1000, on_update_interval)
