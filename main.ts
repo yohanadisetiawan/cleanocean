@@ -8,7 +8,9 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.UntilDone)
+    if (posisi_menu == 1) {
+        music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.UntilDone)
+    }
 })
 statusbars.onStatusReached(StatusBarKind.Energy, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Fixed, 0, function (status) {
     game.setGameOverEffect(false, effects.bubbles)
@@ -21,7 +23,9 @@ info.onScore(100, function () {
     game.setGameOverPlayable(true, music.melodyPlayable(music.sonar), false)
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.UntilDone)
+    if (posisi_menu == 1) {
+        music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.UntilDone)
+    }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
     statusbar.value += -1
