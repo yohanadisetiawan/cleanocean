@@ -2,6 +2,15 @@ function initPembuat () {
     scene.setBackgroundImage(assets.image`Pembuat`)
     story.printText("Pembuat Yohan Adi Setiawan sebagai Guru Informatika/KKA", 75, 110, 15)
 }
+function initIkan () {
+    for (let index = 0; index <= 1; index++) {
+        Ikan = sprites.create(assets.image`IkanNapoleon`, SpriteKind.Projectile)
+        scaling.scaleToPercent(Ikan, 25, ScaleDirection.Uniformly, ScaleAnchor.Middle)
+        Ikan.setPosition(randint(0, scene.screenWidth()), randint(0, scene.screenHeight()))
+        Ikan.setFlag(SpriteFlag.AutoDestroy, true)
+        Ikan.follow(submarine, 15)
+    }
+}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (posisi_menu == 2 || posisi_menu == 3) {
         initMenu()
@@ -13,10 +22,15 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 statusbars.onStatusReached(StatusBarKind.Energy, statusbars.StatusComparison.LTE, statusbars.ComparisonType.Fixed, 0, function (status) {
-    game.setGameOverEffect(false, effects.bubbles)
-    game.setGameOverMessage(false, "GAME OVER!")
-    game.setGameOverPlayable(false, music.melodyPlayable(music.siren), false)
-    game.reset()
+    if (info.life() == 0) {
+        game.setGameOverEffect(false, effects.bubbles)
+        game.setGameOverMessage(false, "GAME OVER!")
+        game.setGameOverPlayable(false, music.melodyPlayable(music.siren), false)
+        game.reset()
+    } else {
+        statusbar.value += 50
+        info.setLife(info.life() - 1)
+    }
 })
 info.onScore(100, function () {
     game.gameOver(true)
@@ -170,6 +184,7 @@ function initMenu () {
             music.stopAllSounds()
             initSelam()
             initKarang()
+            initIkan()
         } else if (story.checkLastAnswer("Bantuan")) {
             posisi_menu = 2
             initBantuan()
@@ -214,12 +229,22 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
 })
 let sampah: Sprite = null
 let karang: Sprite = null
-let submarine: Sprite = null
 let statusbar: StatusBarSprite = null
 let posisi_menu = 0
+let submarine: Sprite = null
+let Ikan: Sprite = null
 initMenu()
 game.onUpdateInterval(1000, function () {
     if (posisi_menu == 1) {
         initSampah()
+        for (let value of sprites.allOfKind(SpriteKind.Projectile)) {
+            if (value.isHittingTile(CollisionDirection.Left)) {
+                value.vx = 30
+                value.image.flipX()
+            } else if (value.isHittingTile(CollisionDirection.Right)) {
+                value.vx = -30
+                value.image.flipY()
+            }
+        }
     }
 })
