@@ -13,8 +13,9 @@ def on_a_pressed():
 controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
 
 def on_left_pressed():
-    music.play(music.melody_playable(music.pew_pew),
-        music.PlaybackMode.UNTIL_DONE)
+    if posisi_menu == 1:
+        music.play(music.melody_playable(music.pew_pew),
+            music.PlaybackMode.UNTIL_DONE)
 controller.left.on_event(ControllerButtonEvent.PRESSED, on_left_pressed)
 
 def on_status_reached_comparison_lte_type_fixed(status):
@@ -34,8 +35,9 @@ def on_on_score():
 info.on_score(100, on_on_score)
 
 def on_right_pressed():
-    music.play(music.melody_playable(music.pew_pew),
-        music.PlaybackMode.UNTIL_DONE)
+    if posisi_menu == 1:
+        music.play(music.melody_playable(music.pew_pew),
+            music.PlaybackMode.UNTIL_DONE)
 controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
 def on_on_overlap(sprite, otherSprite):
